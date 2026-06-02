@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineLux - 毎晩がプレミア上映。</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts & FontAwesome for Premium Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Noto+Sans+JP:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            theaterBlack: '#07070a',
+            theaterDark: '#121218',
+            cinemaRed: '#e50914',
+            cinemaRedHover: '#b80710',
+            luxGold: '#dfb76c',
+            luxGoldLight: '#f3e5ab'
+          },
+          fontFamily: {
+            sans: ['Noto Sans JP', 'sans-serif'],
+            serif: ['Cinzel', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* カーテンオープンアニメーション & ネオン演出用カスタムスタイル */
+    @keyframes curtainLeft {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+    @keyframes curtainRight {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(100%); }
+    }
+    @keyframes goldShine {
+      0%, 100% { text-shadow: 0 0 10px rgba(223, 183, 108, 0.6), 0 0 20px rgba(223, 183, 108, 0.4); }
+      50% { text-shadow: 0 0 20px rgba(223, 183, 108, 0.9), 0 0 40px rgba(223, 183, 108, 0.7); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.03); opacity: 1; box-shadow: 0 0 25px rgba(229, 9, 20, 0.7); }
+    }
+
+    .curtain-left {
+      animation: curtainLeft 1.4s cubic-bezier(0.77, 0, 0.175, 1) 0.8s forwards;
+    }
+    .curtain-right {
+      animation: curtainRight 1.4s cubic-bezier(0.77, 0, 0.175, 1) 0.8s forwards;
+    }
+    .gold-glow {
+      animation: goldShine 3s infinite ease-in-out;
+    }
+    .premium-btn-glow {
+      animation: pulseGlow 2.5s infinite ease-in-out;
+    }
+
+    /* カスタムスクロールバー */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #07070a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #dfb76c;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #f3e5ab;
+    }
+
+    /* レッドカーペットパース効果 */
+    .red-carpet {
+      background: linear-gradient(to top, rgba(229, 9, 20, 0.8) 0%, rgba(18, 18, 24, 0) 100%);
+      clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%);
+    }
+
+    /* ネオンボタンスタイル */
+    .neon-border-netflix { filter: drop-shadow(0 0 6px #e50914); }
+    .neon-border-prime { filter: drop-shadow(0 0 6px #00a8e1); }
+    .neon-border-unext { filter: drop-shadow(0 0 6px #312783); }
+    .neon-border-disney { filter: drop-shadow(0 0 6px #0063e5); }
+  </style>
+</head>
+<body class="bg-theaterBlack text-white font-sans overflow-x-hidden">
+
+  <!-- ================= 幕開け：シアターカーテン演出 ================= -->
+  <div id="curtain-container" class="fixed inset-0 z-50 pointer-events-none flex">
+    <div class="curtain-left w-1/2 h-full bg-gradient-to-r from-red-950 via-red-900 to-red-800 border-r border-luxGold flex items-center justify-end pr-8 shadow-2xl">
+      <div class="text-luxGold text-3xl opacity-20 font-serif">C I N E</div>
+    </div>
+    <div class="curtain-right w-1/2 h-full bg-gradient-to-l from-red-950 via-red-900 to-red-800 border-l border-luxGold flex items-center justify-start pl-8 shadow-2xl">
+      <div class="text-luxGold text-3xl opacity-20 font-serif">L U X</div>
+    </div>
+  </div>
+
+  <!-- ================= 固定ヘッダー ================= -->
+  <header class="fixed top-0 left-0 w-full z-40 bg-gradient-to-b from-black via-black/80 to-transparent py-4 px-6 md:px-12 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <!-- ゴージャスなロゴ -->
+      <span class="font-serif text-2xl md:text-3xl font-extrabold tracking-widest text-luxGold gold-glow flex items-center gap-2">
+        <i class="fa-solid fa-clapperboard text-cinemaRed"></i> CineLux
+      </span>
+      <span class="hidden md:inline-block border border-luxGold/30 text-[10px] text-luxGold uppercase tracking-widest px-2 py-0.5 rounded">
+        VIP ACCESS
+      </span>
+    </div>
+
+    <!-- シンプルかつ直感的ナビ -->
+    <div class="flex items-center gap-6">
+      <button onclick="openRecommendationWizard()" class="bg-gradient-to-r from-luxGold to-luxGoldLight text-theaterBlack font-bold text-xs md:text-sm px-4 py-2 rounded-full shadow-lg hover:brightness-110 transition duration-300 flex items-center gap-2">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> AIコンシェルジュ
+      </button>
+      <div class="relative group">
+        <button class="text-luxGold hover:text-white transition duration-300 text-lg md:text-xl">
+          <i class="fa-regular fa-circle-user"></i>
+        </button>
+        <!-- プチマイページ情報 -->
+        <div class="absolute right-0 mt-3 w-48 bg-theaterDark border border-luxGold/20 rounded-lg p-3 shadow-2xl hidden group-hover:block text-xs">
+          <p class="font-bold text-luxGold mb-1">WELCOME, GUEST</p>
+          <div class="h-[1px] bg-luxGold/10 my-2"></div>
+          <p class="text-gray-400">視聴履歴: 12本</p>
+          <p class="text-gray-400">今月のVIPランク: GOLD</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= 1. THE VIP SEAT (超高精度AIレコメンドファーストビュー) ================= -->
+  <section id="hero-section" class="relative min-h-screen flex items-end justify-start pt-24 pb-16 px-6 md:px-16 overflow-hidden">
+    <!-- 背景ビジュアル (動画風ダイナミックエフェクトを画像とグラデーションで表現) -->
+    <div class="absolute inset-0 z-0">
+      <img id="hero-bg" src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1920&q=80" alt="CineLux Main" class="w-full h-full object-cover brightness-[0.35] transition-all duration-1000 transform scale-105">
+      <div class="absolute inset-0 bg-gradient-to-t from-theaterBlack via-theaterBlack/60 to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-theaterBlack via-transparent to-transparent"></div>
+    </div>
+
+    <!-- コンテンツ -->
+    <div class="relative z-10 max-w-4xl w-full">
+      <div class="inline-flex items-center gap-2 bg-cinemaRed/20 border border-cinemaRed/40 px-3 py-1.5 rounded-full mb-4">
+        <span class="w-2 h-2 rounded-full bg-cinemaRed animate-ping"></span>
+        <span class="text-xs font-bold text-cinemaRed uppercase tracking-wider">AI RECOMMEND FOR YOU</span>
+      </div>
+
+      <!-- AIからの理由付けパーソナライズキャッチコピー -->
+      <p id="hero-ai-reason" class="text-luxGold text-sm md:text-base font-semibold tracking-wide mb-2 italic">
+        「『グレイテスト・ショーマン』の音楽と熱狂に魅了されたあなたへ贈る、今宵最も美しい夢――」
+      </p>
+
+      <!-- メインタイトル -->
+      <h1 id="hero-title" class="font-serif text-4xl md:text-7xl font-extrabold text-white tracking-tight mb-4 leading-tight">
+        ラ・ラ・ランド
+      </h1>
+
+      <!-- メタ情報 -->
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs md:text-sm text-gray-300 mb-6">
+        <span class="border border-gray-500 px-1.5 py-0.5 rounded">G</span>
+        <span>128分</span>
+        <span>2016年</span>
+        <span><i class="fa-solid fa-star text-luxGold mr-1"></i>4.6</span>
+        <span class="text-luxGold font-semibold">ミュージカル / ロマンス</span>
+      </div>
+
+      <!-- あらすじ -->
+      <p id="hero-desc" class="text-gray-300 text-sm md:text-base leading-relaxed mb-8 max-w-2xl line-clamp-3">
+        夢を追う二人の切なくも眩しいラブストーリー。ロサンゼルスを舞台に、女優を目指すミアとジャズピアニストのセバスチャンが互いの才能に惹かれ合いながらも、現実と闘う姿を美しい音楽と映像美で描く極上エンタメ。
+      </p>
+
+      <!-- アクションボタン -->
+      <div class="flex flex-wrap gap-4 items-center">
+        <button id="hero-play-btn" onclick="openTrailerModal('D1ZGBOxeM18')" class="premium-btn-glow bg-cinemaRed hover:bg-cinemaRedHover text-white font-black text-sm md:text-base px-8 py-4 rounded-full shadow-lg transition duration-300 flex items-center gap-2">
+          <i class="fa-solid fa-play"></i> 予告編を再生する
+        </button>
+        <button id="hero-review-btn" onclick="openDetailModal('ラ・ラ・ランド', 'unext')" class="bg-theaterDark/80 hover:bg-theaterDark text-luxGold border border-luxGold/40 font-bold text-sm md:text-base px-6 py-4 rounded-full shadow-lg transition duration-300 flex items-center gap-2">
+          <i class="fa-solid fa-star text-luxGold"></i> レビューを読む・書く
+        </button>
+        <button onclick="scrollToTimeline()" class="bg-theaterDark/80 hover:bg-theaterDark text-white border border-luxGold/40 font-bold text-sm md:text-base px-6 py-4 rounded-full shadow-lg transition duration-300 flex items-center gap-2">
+          <i class="fa-solid fa-calendar-days text-luxGold"></i> 上映中スケジュール
+        </button>
+      </div>
+    </div>
+
+    <!-- ファーストビュー右下の「次のレコメンドへのインジケータ」 -->
+    <div class="absolute right-6 bottom-12 hidden lg:flex flex-col items-end gap-3 max-w-xs bg-theaterDark/80 border border-luxGold/20 p-4 rounded-xl backdrop-blur">
+      <p class="text-xs text-luxGold uppercase font-bold tracking-wider">NEXT UP FOR YOU</p>
+      <div class="flex gap-3">
+        <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=150&q=80" class="w-12 h-16 object-cover rounded" alt="Next item">
+        <div>
+          <h4 class="text-xs font-bold line-clamp-1">インセプション</h4>
+          <p class="text-[10px] text-gray-400 line-clamp-2">「ラ・ラ・ランド」の次にAIが提案する極限脳内ミステリー</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================= 2. VOD ROULETTE (サブスク別おすすめナビ) ================= -->
+  <section class="py-16 bg-gradient-to-b from-theaterBlack to-theaterDark relative px-6 md:px-16 border-t border-luxGold/10">
+    <div class="max-w-7xl mx-auto">
+      
+      <div class="text-center mb-10">
+        <h2 class="font-serif text-3xl md:text-4xl font-extrabold tracking-wide mb-2">
+          <span class="text-luxGold">VOD ROULETTE</span> - サブスク別特等席
+        </h2>
+        <p class="text-gray-400 text-sm md:text-base">
+          あなたが契約しているサブスクをタップ。今すぐ観られる厳選お宝映画をネオンの光と共にお届けします。
+        </p>
+      </div>
+
+      <!-- CineLux 魔法の検索バー＆カテゴリーフィルター -->
+      <div class="max-w-4xl mx-auto mb-10">
+        <div class="relative bg-theaterDark/60 border border-luxGold/30 rounded-2xl p-4 backdrop-blur shadow-2xl">
+          <div class="flex flex-col md:flex-row gap-4 items-center">
+            <!-- 検索インプット -->
+            <div class="relative w-full flex-1">
+              <span class="absolute inset-y-0 left-4 flex items-center text-luxGold">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </span>
+              <input type="text" id="movie-search-input" oninput="handleSearch(this.value)" placeholder="作品名、俳優・監督（例：ディカプリオ、佐藤健）、ジャンル（例：SF、恋愛）..." class="w-full bg-theaterBlack/80 border border-luxGold/20 focus:border-luxGold text-white pl-11 pr-4 py-3 rounded-xl text-sm outline-none transition duration-300">
+            </div>
+            
+            <!-- 洋画 / 邦画 カテゴリーフィルター -->
+            <div class="flex bg-theaterBlack/80 p-1 rounded-xl border border-luxGold/20 w-full md:w-auto shrink-0">
+              <button onclick="switchCategory('all')" id="cat-all" class="cat-btn flex-1 md:flex-none px-6 py-2.5 text-xs font-bold rounded-lg transition duration-300 bg-gradient-to-r from-luxGold to-luxGoldLight text-theaterBlack">
+                すべて
+              </button>
+              <button onclick="switchCategory('foreign')" id="cat-foreign" class="cat-btn flex-1 md:flex-none px-6 py-2.5 text-xs font-bold text-gray-400 hover:text-white rounded-lg transition duration-300">
+                洋画
+              </button>
+              <button onclick="switchCategory('japanese')" id="cat-japanese" class="cat-btn flex-1 md:flex-none px-6 py-2.5 text-xs font-bold text-gray-400 hover:text-white rounded-lg transition duration-300">
+                邦画
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VOD セレクター (ネオンタブ風) -->
+      <div class="flex flex-wrap justify-center gap-3 md:gap-6 mb-12">
+        <!-- Netflix -->
+        <button onclick="switchVOD('netflix')" id="btn-netflix" class="vod-tab active px-5 py-3 rounded-xl border border-red-600 bg-red-950/20 text-white font-bold text-sm tracking-wide transition duration-300 flex items-center gap-2 neon-border-netflix">
+          <i class="fa-solid fa-circle text-cinemaRed"></i> NETFLIX
+        </button>
+        <!-- Amazon Prime -->
+        <button onclick="switchVOD('prime')" id="btn-prime" class="vod-tab px-5 py-3 rounded-xl border border-gray-700 hover:border-sky-400 bg-theaterDark text-gray-400 hover:text-white font-bold text-sm tracking-wide transition duration-300 flex items-center gap-2">
+          <i class="fa-solid fa-circle text-sky-400 opacity-60"></i> Prime Video
+        </button>
+        <!-- U-NEXT -->
+        <button onclick="switchVOD('unext')" id="btn-unext" class="vod-tab px-5 py-3 rounded-xl border border-gray-700 hover:border-blue-500 bg-theaterDark text-gray-400 hover:text-white font-bold text-sm tracking-wide transition duration-300 flex items-center gap-2">
+          <i class="fa-solid fa-circle text-blue-500 opacity-60"></i> U-NEXT
+        </button>
+        <!-- Disney+ -->
+        <button onclick="switchVOD('disney')" id="btn-disney" class="vod-tab px-5 py-3 rounded-xl border border-gray-700 hover:border-sky-300 bg-theaterDark text-gray-400 hover:text-white font-bold text-sm tracking-wide transition duration-300 flex items-center gap-2">
+          <i class="fa-solid fa-circle text-sky-300 opacity-60"></i> Disney+
+        </button>
+      </div>
+
+      <!-- 切り替わる映画ショーケース -->
+      <div id="vod-cards-container" class="grid grid-cols-2 md:grid-cols-4 gap-6 transition-all duration-500">
+        <!-- JSで動的生成されます -->
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ================= 3. THE GRAND TIMELINE (新作・上映スケジュール) ================= -->
+  <section id="timeline-section" class="py-20 bg-theaterBlack relative overflow-hidden">
+    <!-- 立体レッドカーペット背景 -->
+    <div class="absolute inset-x-0 bottom-0 h-96 red-carpet opacity-25 z-0 pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-6 md:px-16 relative z-10">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-luxGold"><i class="fa-solid fa-ticket text-xl"></i></span>
+            <span class="text-xs uppercase tracking-widest text-luxGold font-bold">RED CARPET TIMELINE</span>
+          </div>
+          <h2 class="font-serif text-3xl md:text-5xl font-black">新作シネマ・グランドタイムライン</h2>
+        </div>
+        <div class="flex items-center gap-3 text-xs md:text-sm">
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-green-500 rounded-full inline-block"></span>公開中</span>
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-luxGold rounded-full inline-block"></span>本日発売</span>
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-purple-600 rounded-full inline-block"></span>先行予約</span>
+        </div>
+      </div>
+
+      <!-- スケジュールタイムライン（横スクロールカルーセル） -->
+      <div class="flex gap-6 overflow-x-auto pb-8 pt-4 px-2 snap-x">
+        
+        <!-- 作品1: 公開中 -->
+        <div class="min-w-[280px] md:min-w-[340px] bg-theaterDark rounded-2xl overflow-hidden border border-luxGold/20 hover:border-luxGold transition duration-300 transform hover:-translate-y-2 snap-start flex flex-col justify-between shadow-2xl">
+          <div>
+            <div class="relative h-48 overflow-hidden">
+              <span class="absolute top-3 left-3 bg-green-500 text-theaterBlack font-black text-xs px-2.5 py-1 rounded-full uppercase tracking-wider">上映中</span>
+              <img src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover" alt="Cinema Event">
+              <div class="absolute inset-0 bg-gradient-to-t from-theaterDark to-transparent"></div>
+            </div>
+            <div class="p-5">
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="font-bold text-lg leading-tight text-white">エターナル・オデッセイ</h3>
+                <span class="text-luxGold font-serif font-bold text-sm">★ 4.8</span>
+              </div>
+              <p class="text-xs text-luxGold font-semibold mb-3">TOHOシネマズ梅田 ほか全国で公開中</p>
+              <p class="text-xs text-gray-400 line-clamp-2">宇宙の果てに取り残された宇宙飛行士と、AIの絆を描いたSF超大作。</p>
+            </div>
+          </div>
+          <div class="p-5 pt-0">
+            <button onclick="openTicketModal('エターナル・オデッセイ', 'TOHOシネマズ梅田')" class="w-full bg-cinemaRed hover:bg-cinemaRedHover text-white font-bold text-xs py-3 rounded-xl transition duration-300 flex items-center justify-center gap-2">
+              <i class="fa-solid fa-ticket-simple"></i> 最寄りの劇場スケジュール
+            </button>
+          </div>
+        </div>
+
+        <!-- 作品2: 公開中 -->
+        <div class="min-w-[280px] md:min-w-[340px] bg-theaterDark rounded-2xl overflow-hidden border border-luxGold/20 hover:border-luxGold transition duration-300 transform hover:-translate-y-2 snap-start flex flex-col justify-between shadow-2xl">
+          <div>
+            <div class="relative h-48 overflow-hidden">
+              <span class="absolute top-3 left-3 bg-green-500 text-theaterBlack font-black text-xs px-2.5 py-1 rounded-full uppercase tracking-wider">上映中</span>
+              <img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover" alt="Classic Theater">
+              <div class="absolute inset-0 bg-gradient-to-t from-theaterDark to-transparent"></div>
+            </div>
+            <div class="p-5">
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="font-bold text-lg leading-tight text-white">ジャズ・ナイト・イン・キョウト</h3>
+                <span class="text-luxGold font-serif font-bold text-sm">★ 4.5</span>
+              </div>
+              <p class="text-xs text-luxGold font-semibold mb-3">シネマカリテ ほか単館ロードショー</p>
+              <p class="text-xs text-gray-400 line-clamp-2">京都の路地裏にある老舗ジャズバーを舞台に繰り広げられる大人たちの極上群像劇。</p>
+            </div>
+          </div>
+          <div class="p-5 pt-0">
+            <button onclick="openTicketModal('ジャズ・ナイト・イン・キョウト', 'シネマカリテ')" class="w-full bg-cinemaRed hover:bg-cinemaRedHover text-white font-bold text-xs py-3 rounded-xl transition duration-300 flex items-center justify-center gap-2">
+              <i class="fa-solid fa-ticket-simple"></i> 最寄りの劇場スケジュール
+            </button>
+          </div>
+        </div>
+
+        <!-- 作品3: 来週公開 -->
+        <div class="min-w-[280px] md:min-w-[340px] bg-theaterDark rounded-2xl overflow-hidden border border-luxGold/20 hover:border-luxGold transition duration-300 transform hover:-translate-y-2 snap-start flex flex-col justify-between shadow-2xl">
+          <div>
+            <div class="relative h-48 overflow-hidden">
+              <span class="absolute top-3 left-3 bg-luxGold text-theaterBlack font-black text-xs px-2.5 py-1 rounded-full uppercase tracking-wider">6.12 金曜ロード</span>
+              <img src="https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover" alt="Upcoming Sunset">
+              <div class="absolute inset-0 bg-gradient-to-t from-theaterDark to-transparent"></div>
+            </div>
+            <div class="p-5">
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="font-bold text-lg leading-tight text-white">黄昏のシルエット</h3>
+                <span class="text-gray-400 font-serif font-bold text-sm">未公開</span>
+              </div>
+              <p class="text-xs text-luxGold font-semibold mb-3">公開まであと <span class="text-white font-bold">10日</span></p>
+              <p class="text-xs text-gray-400 line-clamp-2">名匠が贈る、静寂な湖畔の町で起きるミステリアスな愛憎劇。</p>
+            </div>
+          </div>
+          <div class="p-5 pt-0">
+            <button onclick="openTicketModal('黄昏のシルエット', '新宿ピカデリー')" class="w-full bg-gradient-to-r from-luxGold to-luxGoldLight text-theaterBlack font-black text-xs py-3 rounded-xl transition duration-300 flex items-center justify-center gap-2">
+              <i class="fa-regular fa-bell"></i> 先行座席予約・通知
+            </button>
+          </div>
+        </div>
+
+        <!-- 作品4: 待機作 -->
+        <div class="min-w-[280px] md:min-w-[340px] bg-theaterDark rounded-2xl overflow-hidden border border-luxGold/20 hover:border-luxGold transition duration-300 transform hover:-translate-y-2 snap-start flex flex-col justify-between shadow-2xl">
+          <div>
+            <div class="relative h-48 overflow-hidden">
+              <span class="absolute top-3 left-3 bg-purple-600 text-white font-black text-xs px-2.5 py-1 rounded-full uppercase tracking-wider">秋公開決定</span>
+              <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover" alt="Action Scene">
+              <div class="absolute inset-0 bg-gradient-to-t from-theaterDark to-transparent"></div>
+            </div>
+            <div class="p-5">
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="font-bold text-lg leading-tight text-white">サイバー・パンク・リボーン</h3>
+                <span class="text-gray-400 font-serif font-bold text-sm">未公開</span>
+              </div>
+              <p class="text-xs text-luxGold font-semibold mb-3">特報映像・第一弾解禁</p>
+              <p class="text-xs text-gray-400 line-clamp-2">2088年のネオ・トーキョー。世界を揺るがす電脳サスペンスアクション。</p>
+            </div>
+          </div>
+          <div class="p-5 pt-0">
+            <button onclick="openTrailerModal('D1ZGBOxeM18')" class="w-full bg-transparent border border-luxGold text-luxGold hover:bg-luxGold hover:text-theaterBlack font-bold text-xs py-3 rounded-xl transition duration-300 flex items-center justify-center gap-2">
+              <i class="fa-solid fa-play"></i> 予告特報を再生する
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ================= EXTRA: AI WIZARD DEMO (体験型AIレコメンド機能) ================= -->
+  <section class="py-16 bg-gradient-to-b from-theaterDark to-theaterBlack px-6 md:px-16 border-t border-luxGold/15">
+    <div class="max-w-4xl mx-auto bg-gradient-to-r from-red-950/40 via-theaterDark to-red-950/40 border border-luxGold/30 p-8 rounded-3xl text-center shadow-2xl relative overflow-hidden">
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-1 bg-gradient-to-r from-transparent via-luxGold to-transparent"></div>
+      
+      <span class="text-luxGold text-3xl mb-4 inline-block"><i class="fa-solid fa-wand-magic-sparkles animate-pulse"></i></span>
+      <h2 class="font-serif text-2xl md:text-3xl font-black text-luxGold mb-2">Cine-Brain AI 魔法体験</h2>
+      <p class="text-xs md:text-sm text-gray-300 mb-8 max-w-xl mx-auto">
+        「今夜はどんな非日常を味わいたい？」あなたの心の望みを1つだけ教えてください。CineLuxのAIがその場でパーフェクトな作品をレコメンドします。
+      </p>
+
+      <div class="flex flex-wrap justify-center gap-3 mb-8">
+        <button onclick="simulateAIRecommend('adventure')" class="px-5 py-2.5 rounded-full border border-luxGold/40 hover:border-luxGold bg-theaterBlack text-xs md:text-sm font-semibold hover:text-luxGold transition duration-300">
+          <i class="fa-solid fa-compass text-luxGold mr-1"></i> 胸が躍る壮大なアドベンチャー
+        </button>
+        <button onclick="simulateAIRecommend('tears')" class="px-5 py-2.5 rounded-full border border-luxGold/40 hover:border-luxGold bg-theaterBlack text-xs md:text-sm font-semibold hover:text-luxGold transition duration-300">
+          <i class="fa-solid fa-droplet text-blue-400 mr-1"></i> 心が洗われる最高の涙活
+        </button>
+        <button onclick="simulateAIRecommend('mind')" class="px-5 py-2.5 rounded-full border border-luxGold/40 hover:border-luxGold bg-theaterBlack text-xs md:text-sm font-semibold hover:text-luxGold transition duration-300">
+          <i class="fa-solid fa-brain text-purple-400 mr-1"></i> 脳が震える極限サスペンス
+        </button>
+        <button onclick="simulateAIRecommend('laugh')" class="px-5 py-2.5 rounded-full border border-luxGold/40 hover:border-luxGold bg-theaterBlack text-xs md:text-sm font-semibold hover:text-luxGold transition duration-300">
+          <i class="fa-solid fa-face-laugh-beam text-yellow-400 mr-1"></i> 笑ってハッピーになりたい
+        </button>
+      </div>
+
+      <!-- AIレコメンド結果表示枠 -->
+      <div id="ai-result" class="hidden transition-all duration-500 transform scale-95 border-t border-luxGold/10 pt-6 mt-6">
+        <div class="flex flex-col md:flex-row items-center gap-6 text-left max-w-2xl mx-auto">
+          <img id="ai-result-img" src="" class="w-24 h-36 object-cover rounded-lg border border-luxGold shadow-lg" alt="Result Poster">
+          <div>
+            <span class="text-[10px] bg-luxGold/20 text-luxGold px-2 py-1 rounded font-bold uppercase tracking-wider mb-2 inline-block">AI SELECT FOR YOU</span>
+            <h4 id="ai-result-title" class="font-serif text-xl font-black text-white mb-1"></h4>
+            <p id="ai-result-reason" class="text-xs text-luxGold italic mb-3"></p>
+            <p id="ai-result-desc" class="text-xs text-gray-400 leading-relaxed"></p>
+            <button id="ai-result-action" class="mt-4 bg-cinemaRed hover:bg-cinemaRedHover text-white text-[11px] font-bold px-4 py-2 rounded-full transition duration-300 flex items-center gap-1.5">
+              <i class="fa-solid fa-play"></i> 予告編を観る
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ================= フッター ================= -->
+  <footer class="bg-black py-12 px-6 md:px-16 border-t border-luxGold/10 text-center">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
+      <div class="text-left">
+        <span class="font-serif text-2xl font-black text-luxGold tracking-widest block mb-2">CineLux</span>
+        <p class="text-xs text-gray-500">Copyright &copy; 2026 CineLux. All Rights Reserved. 毎日を感動で満たそう。</p>
+      </div>
+      <div class="flex gap-6 text-xl text-luxGold">
+        <a href="#" class="hover:text-white transition"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#" class="hover:text-white transition"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" class="hover:text-white transition"><i class="fa-brands fa-youtube"></i></a>
+      </div>
+    </div>
+    <p class="text-[10px] text-gray-700 max-w-xl mx-auto">
+      ※このサイトはCineLuxの演出・ワイヤーフレーム体験用プレミアムプロトタイプです。一部の映画情報は演出のために再現・シミュレーションされています。
+    </p>
+  </footer>
+
+
+  <!-- ================= POPUPS / MODALS ================= -->
+
+  <!-- 映画詳細＆レビュー投稿・閲覧モーダル -->
+  <div id="detail-modal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 hidden overflow-y-auto">
+    <div class="bg-theaterDark border border-luxGold p-6 md:p-8 rounded-2xl max-w-4xl w-full shadow-2xl relative max-h-[90vh] overflow-y-auto flex flex-col">
+      <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl transition z-10">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- モーダルヘッダー -->
+      <div class="border-b border-luxGold/20 pb-4 mb-6">
+        <div class="flex items-center gap-3">
+          <span class="text-cinemaRed font-black uppercase tracking-wider text-xs px-2.5 py-1 bg-cinemaRed/10 rounded-full border border-cinemaRed/20">CineLux Showroom</span>
+          <span class="text-luxGold text-xs"><i class="fa-solid fa-circle-check"></i> VIP会員限定公開</span>
+        </div>
+        <h3 id="detail-movie-title" class="font-serif text-2xl md:text-4xl font-extrabold text-white mt-2">映画タイトル</h3>
+      </div>
+
+      <!-- グリッド構成 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 flex-1">
+        <!-- 左カラム：映画情報 -->
+        <div class="space-y-6">
+          <div class="relative rounded-xl overflow-hidden aspect-video border border-luxGold/20 shadow-2xl">
+            <img id="detail-movie-img" src="" class="w-full h-full object-cover" alt="Poster">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4">
+              <button id="detail-play-btn" class="bg-cinemaRed hover:bg-cinemaRedHover text-white font-bold text-xs px-4 py-2.5 rounded-full flex items-center gap-2 transition shadow-lg">
+                <i class="fa-solid fa-play"></i> 予告編を今すぐ再生
+              </button>
+            </div>
+          </div>
+
+          <div class="space-y-4 text-sm">
+            <div>
+              <p class="text-xs text-luxGold font-bold uppercase tracking-wider mb-1">作品解説</p>
+              <p id="detail-movie-desc" class="text-gray-300 leading-relaxed">解説文が入ります。</p>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 border-t border-luxGold/10 pt-4">
+              <div>
+                <p class="text-xs text-luxGold font-bold uppercase tracking-wider">キャスト / スタッフ</p>
+                <p id="detail-movie-actors" class="text-gray-300 text-xs mt-1">俳優名</p>
+              </div>
+              <div>
+                <p class="text-xs text-luxGold font-bold uppercase tracking-wider">評価点</p>
+                <div class="flex items-center gap-1.5 mt-1">
+                  <span class="text-luxGold"><i class="fa-solid fa-star"></i></span>
+                  <span id="detail-movie-score" class="font-bold text-white">4.8</span>
+                  <span class="text-gray-500 text-xs">(CineLux AI算出)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右カラム：レビュータイムライン＆新規投稿 -->
+        <div class="flex flex-col space-y-6 h-full border-t md:border-t-0 md:border-l border-luxGold/10 md:pl-8 pt-6 md:pt-0">
+          
+          <!-- レビュー閲覧エリア -->
+          <div class="flex-1 space-y-4">
+            <h4 class="font-bold text-base text-luxGold flex items-center gap-2">
+              <i class="fa-regular fa-comments"></i> 観客の熱狂 (レビュー)
+            </h4>
+            
+            <!-- スクロール可能なレビューリスト -->
+            <div id="reviews-list-container" class="space-y-3 max-h-[220px] overflow-y-auto pr-2">
+              <!-- JSで動的生成されます -->
+            </div>
+          </div>
+
+          <!-- レビュー投稿フォーム -->
+          <div class="bg-theaterBlack/80 border border-luxGold/20 p-4 rounded-xl space-y-4">
+            <h4 class="font-bold text-sm text-luxGoldLight flex items-center gap-1.5">
+              <i class="fa-solid fa-pen-nib"></i> 今宵の余韻を書き残す
+            </h4>
+
+            <div class="space-y-3">
+              <!-- 星評価セレクター -->
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-gray-400">あなたの評価:</span>
+                <div class="flex items-center gap-1" id="star-selector-container">
+                  <button type="button" onclick="setRating(1)" class="star-btn text-lg text-luxGold transition hover:scale-110"><i class="fa-solid fa-star"></i></button>
+                  <button type="button" onclick="setRating(2)" class="star-btn text-lg text-luxGold transition hover:scale-110"><i class="fa-solid fa-star"></i></button>
+                  <button type="button" onclick="setRating(3)" class="star-btn text-lg text-luxGold transition hover:scale-110"><i class="fa-solid fa-star"></i></button>
+                  <button type="button" onclick="setRating(4)" class="star-btn text-lg text-luxGold transition hover:scale-110"><i class="fa-solid fa-star"></i></button>
+                  <button type="button" onclick="setRating(5)" class="star-btn text-lg text-luxGold transition hover:scale-110"><i class="fa-solid fa-star"></i></button>
+                </div>
+              </div>
+
+              <!-- ニックネーム -->
+              <div>
+                <input type="text" id="review-author" placeholder="あなたの劇場席名（例: プレミアムGUEST）" class="w-full bg-theaterDark/80 border border-luxGold/15 focus:border-luxGold text-xs text-white p-2.5 rounded-lg outline-none transition">
+              </div>
+
+              <!-- レビュー本文 -->
+              <div>
+                <textarea id="review-comment" rows="3" placeholder="音楽、演技、演出はどうでしたか？興奮や感動を自由に書き留めましょう..." class="w-full bg-theaterDark/80 border border-luxGold/15 focus:border-luxGold text-xs text-white p-2.5 rounded-lg outline-none transition resize-none"></textarea>
+              </div>
+
+              <!-- 投稿ボタン -->
+              <button id="submit-review-btn" class="w-full bg-gradient-to-r from-luxGold to-luxGoldLight hover:brightness-110 text-theaterBlack font-black text-xs py-2.5 rounded-lg transition shadow-lg flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-paper-plane"></i> レビューを劇場に投稿する
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 劇場用プレミアム・カスタムトースト通知 -->
+  <div id="lux-toast" class="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-theaterDark via-red-950/90 to-theaterDark border border-luxGold p-4 rounded-xl shadow-2xl flex items-center gap-4 transition-all duration-500 transform translate-y-full opacity-0 max-w-sm">
+    <div class="text-luxGold text-2xl"><i class="fa-solid fa-wand-magic-sparkles animate-pulse"></i></div>
+    <div>
+      <h5 id="toast-title" class="font-serif font-bold text-xs text-luxGold uppercase tracking-wider">CineLux Signal</h5>
+      <p id="toast-message" class="text-[11px] text-gray-300 mt-0.5">メッセージがここに入ります。</p>
+    </div>
+    <button onclick="hideCineLuxNotification()" class="text-gray-500 hover:text-white transition ml-auto text-sm">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <!-- 映画予告編再生モーダル (YouTube埋め込み) -->
+  <div id="trailer-modal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 hidden">
+    <div class="relative w-full max-w-4xl aspect-video bg-theaterDark rounded-xl border border-luxGold/30 overflow-hidden shadow-2xl">
+      <button onclick="closeTrailerModal()" class="absolute top-4 right-4 z-50 text-white hover:text-luxGold text-2xl bg-black/60 w-10 h-10 rounded-full flex items-center justify-center transition">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="w-full h-full" id="yt-player-container">
+        <!-- 予告用動画のiframeがここに挿入されます -->
+      </div>
+    </div>
+  </div>
+
+  <!-- チケット予約体験モーダル -->
+  <div id="ticket-modal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-theaterDark border border-luxGold p-6 md:p-8 rounded-2xl max-w-md w-full shadow-2xl relative text-center">
+      <button onclick="closeTicketModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      
+      <span class="text-4xl text-luxGold mb-3 inline-block"><i class="fa-solid fa-map-location-dot"></i></span>
+      <h3 class="font-serif text-xl font-extrabold text-luxGold mb-1">最寄りのシアター特等席</h3>
+      <p class="text-xs text-gray-400 mb-6">GPSで検出したあなたから一番近い映画館の情報です</p>
+
+      <div class="bg-theaterBlack p-4 rounded-xl border border-luxGold/15 text-left mb-6">
+        <p class="text-xs text-luxGold uppercase font-bold mb-1">NOW SHOWING</p>
+        <p id="ticket-movie-title" class="font-bold text-base text-white mb-3">映画タイトル</p>
+        
+        <p class="text-xs text-gray-400 mb-0.5">検出された劇場:</p>
+        <p id="ticket-cinema-name" class="font-bold text-sm text-luxGoldLight mb-3">シネマ名</p>
+
+        <p class="text-xs text-gray-400 mb-1.5">本日(最速)の上映スケジュール:</p>
+        <div class="flex gap-2">
+          <button onclick="selectShowtime('15:20')" class="bg-cinemaRed/10 hover:bg-cinemaRed border border-cinemaRed/30 text-white font-bold text-xs px-3 py-2 rounded transition">15:20〜 (残席あり)</button>
+          <button onclick="selectShowtime('18:10')" class="bg-cinemaRed/10 hover:bg-cinemaRed border border-cinemaRed/30 text-white font-bold text-xs px-3 py-2 rounded transition">18:10〜 (残少)</button>
+          <button onclick="selectShowtime('21:00')" class="bg-cinemaRed/10 hover:bg-cinemaRed border border-cinemaRed/30 text-white font-bold text-xs px-3 py-2 rounded transition">21:00〜 (極上音響)</button>
+        </div>
+      </div>
+
+      <div class="flex gap-3">
+        <button onclick="closeTicketModal()" class="flex-1 bg-transparent hover:bg-white/10 text-white text-xs font-bold py-3 rounded-lg border border-gray-600 transition">戻る</button>
+        <a id="ticket-booking-link" href="#" onclick="showCineLuxNotification('VIP TICKET', '最速1タップ決済：チケットの発券シミュレーションに成功しました！'); closeTicketModal(); return false;" class="flex-1 bg-gradient-to-r from-luxGold to-luxGoldLight text-theaterBlack text-xs font-black py-3 rounded-lg transition text-center flex items-center justify-center gap-1.5 shadow-lg">
+          <i class="fa-solid fa-credit-card"></i> 1タップ決済へ進む
+        </a>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================= CORE INTERACTIVE JAVASCRIPT ================= -->
+  <script>
+    // 映画情報の静的データバンク (洋画category: "foreign", 邦画category: "japanese", 俳優・ジャンル等詳細設定)
+    const moviesData = {
+      hero: {
+        id: "D1ZGBOxeM18", // La La Land Trailer id
+        title: "ラ・ラ・ランド",
+        aiReason: "「『グレイテスト・ショーマン』の音楽と熱狂に魅了されたあなたへ贈る、今宵最も美しい夢――」",
+        desc: "夢を追う二人の切なくも眩しいラブストーリー。ロサンゼルスを舞台に、女優を目指すミアとジャズピアニストのセバスチャンが互いの才能に惹かれ合いながらも、現実と闘う姿を美しい音楽と映像美で描く極上エンタメ。",
+        img: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1920&q=80"
+      },
+      netflix: [
+        { title: "インセプション", score: "4.7", tags: "SF / ミステリー", category: "foreign", genres: ["SF", "ミステリー", "アクション", "サスペンス"], actors: ["レオナルド・ディカプリオ", "渡辺謙", "エリオット・ペイジ"], img: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=400&q=80", ytId: "YoHD9XEInc0", desc: "他人の夢の中に潜入し、アイデアを植え付けるスパイ。究極の脳内アクションSF。" },
+        { title: "シン・ゴジラ", score: "4.6", tags: "SF / パニック / 邦画", category: "japanese", genres: ["SF", "パニック", "ドラマ", "特撮"], actors: ["長谷川博己", "竹野内豊", "石原さとみ", "高橋一生"], img: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&w=400&q=80", ytId: "M89VLyi0794", desc: "巨大不明生物ゴジラが現代日本に上陸。官僚、自衛隊、科学者たちの英知を結集した「対ゴジラ」未曾有の戦い。" },
+        { title: "ダークナイト", score: "4.9", tags: "アクション / サスペンス", category: "foreign", genres: ["アクション", "サスペンス", "クライム", "ヒーロー"], actors: ["クリスチャン・ベール", "ヒース・レジャー", "ゲイリー・オールドマン"], img: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?auto=format&fit=crop&w=400&q=80", ytId: "LDG9bisJEaI", desc: "混沌を愛する最凶の敵ジョーカーと、ゴッサムの守護者バットマン。最高傑作のダークアクション。" },
+        { title: "花束みたいな恋をした", score: "4.5", tags: "ロマンス / ドラマ / 邦画", category: "japanese", genres: ["ロマンス", "ドラマ", "恋愛"], actors: ["菅田将暉", "有村架純", "清原果耶"], img: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=400&q=80", ytId: "y1fUorZgIek", desc: "終電を逃した駅から始まった、2人の一生忘れられない5年間の最高の恋の軌跡。共感度100%のラブストーリー。" },
+        { title: "パルプ・フィクション", score: "4.6", tags: "クライム / コメディ", category: "foreign", genres: ["クライム", "コメディ", "群像劇"], actors: ["ジョン・トラボルタ", "サミュエル・L・ジャクソン", "ユマ・サーマン"], img: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=400&q=80", ytId: "s7EdQ4FqbhY", desc: "タランティーノ監督の名作。複数のエピソードがパズルのように絡み合う、最高にスタイリッシュな犯罪群像劇。" }
+      ],
+      prime: [
+        { title: "インターステラー", score: "4.8", tags: "SF / 感動", category: "foreign", genres: ["SF", "ドラマ", "宇宙", "家族"], actors: ["マシュー・マコノヒー", "アン・ハサウェイ", "ジェシカ・チャステイン"], img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=400&q=80", ytId: "zSWdZVtXT7E", desc: "地球滅亡の危機。娘に再会することを誓い、人類の未来を背負ってブラックホールの彼方へ旅立つ父親の絆のSF。" },
+        { title: "ドライブ・マイ・カー", score: "4.7", tags: "ヒューマンドラマ / 邦画", category: "japanese", genres: ["ドラマ", "ミステリー", "文芸"], actors: ["西島秀俊", "三浦透子", "岡田将生", "霧島れいか"], img: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&w=400&q=80", ytId: "68iX7D_aZ7A", desc: "喪失と希望を描き世界中で賞賛を浴びたアカデミー賞受賞作。愛車で旅する劇作家と物静かな女性ドライバーの心の交流。" },
+        { title: "サウンド・オブ・メタル", score: "4.5", tags: "音楽 / ドラマ", category: "foreign", genres: ["ドラマ", "音楽", "ヒューマン"], actors: ["リズ・アーメッド", "オリヴィア・クック", "ポール・レイシー"], img: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=400&q=80", ytId: "VFOrGkAvjAE", desc: "突如聴覚を失ったドラマーの苦悩と再生。音が聞こえなくなる絶望を圧慢の音響設計で描いたアカデミー賞受賞作。" },
+        { title: "万引き家族", score: "4.8", tags: "社会派 drama / 邦画", category: "japanese", genres: ["ドラマ", "家族", "社会派"], actors: ["リリー・フランキー", "安藤サクラ", "松岡茉優", "樹木希林"], img: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=400&q=80", ytId: "T7M-t7m9v9c", desc: "パルムドール受賞。東京の下町で犯罪によってのみ繋がる、貧しくも温かい偽りの家族が秘める衝撃の真実。" },
+        { title: "グランド・ブダペスト・ホテル", score: "4.6", tags: "コメディ / アート", category: "foreign", genres: ["コメディ", "ミステリー", "アート"], actors: ["レイフ・ファインズ", "トニー・レヴォロリ", "シアーシャ・ローナン"], img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80", ytId: "1Fg5iWmQjwk", desc: "絵本のように完璧なシンメトリー世界。伝統ホテルのコンシェルジュとベルボーイが巻き込まれる連続怪事件。" }
+      ],
+      unext: [
+        { title: "ラ・ラ・ランド", score: "4.8", tags: "ミュージカル", category: "foreign", genres: ["ミュージカル", "ロマンス", "ドラマ", "音楽"], actors: ["ライアン・ゴズリング", "エマ・ストーン", "ジョン・レジェンド"], img: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=400&q=80", ytId: "D1ZGBOxeM18", desc: "夢を追うふたりの美しく切ない物語。音楽とダンスがスクリーンいっぱいに舞い踊る至福の映画体験。" },
+        { title: "君の名は。", score: "4.8", tags: "アニメ / ファンタジー / 邦画", category: "japanese", genres: ["アニメ", "ファンタジー", "SF", "ロマンス"], actors: ["神木隆之介", "上白石萌音", "長澤まさみ"], img: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&w=400&q=80", ytId: "3KR8_M-G9pA", desc: "東京の少年と飛騨の田舎町に暮らす少女。夢の中で入れ替わる２つの運命と、迫り来る彗星の脅威を描く超大ヒット作。" },
+        { title: "セッション", score: "4.7", tags: "狂気 / ジャズ", category: "foreign", genres: ["音楽", "ドラマ", "サスペンス", "狂気"], actors: ["マイルズ・テラー", "J・K・シモンズ", "ポール・ライザー"], img: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=400&q=80", ytId: "0YvHQJeo_X8", desc: "名門音大の狂血ドラマーvs鬼教官。互いの狂気が極限まで激突し、息をのむ興奮のラスト9分。" },
+        { title: "るろうに剣心 京都大火編", score: "4.6", tags: "アクション / 時代劇 / 邦画", category: "japanese", genres: ["アクション", "時代劇", "コミック原作"], actors: ["佐藤健", "武井咲", "藤原竜也", "伊勢谷友介"], img: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=400&q=80", ytId: "pA4FInuPZQA", desc: "動乱 of 幕末。かつて人斬り抜刀斎と恐れられた剣心が、国家転覆を目論む志々雄真実との宿命の死闘に挑むアクション大作。" },
+        { title: "パラサイト 半地下の家族", score: "4.8", tags: "サスペンス / コメディ", category: "foreign", genres: ["サスペンス", "コメディ", "社会派"], actors: ["ソン・ガンホ", "イ・ソンギュン", "チョ・ヨジョン"], img: "https://images.unsplash.com/photo-1542204172-e70528091867?auto=format&fit=crop&w=400&q=80", ytId: "5xH0HfJHsaY", desc: "全員失業中の貧困家族が、超裕豪邸に1人ずつ家庭教師として「寄生」していく衝撃の超一級ブラックユーモア。" }
+      ],
+      disney: [
+        { title: "グレイテスト・ショーマン", score: "4.9", tags: "ミュージカル / 感動", category: "foreign", genres: ["ミュージカル", "ドラマ", "音楽", "伝記"], actors: ["ヒュー・ジャックマン", "ザック・エフロン", "ゼンデイヤ"], img: "https://images.unsplash.com/photo-1460881680858-30d872d5b530?auto=format&fit=crop&w=400&q=80", ytId: "m32pE49zXU0", desc: "ショービジネスの幕をあけた男 of 情熱とロマン。すべての観客に圧倒的な祝祭感と「これが私だ」と歌う勇気を贈る。" },
+        { title: "リメンバー・ミー", score: "4.8", tags: "ファンタジー / 涙", category: "foreign", genres: ["アニメ", "ファミリー", "ファンタジー", "音楽"], actors: ["アンソニー・ゴンザレス", "ガエル・ガルシア・ベルナル", "ベンジャミン・ブラット"], img: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&w=400&q=80", ytId: "vB8fM0FfFw8", desc: "死者の国へ迷い込んだ音楽を愛する少年ミゲル。家族の絆と美しい音楽が涙腺を刺激し尽くすディズニーピクサー傑作。" },
+        { title: "千と千尋の神隠し", score: "4.9", tags: "ジブリ / アニメ / 邦画", category: "japanese", genres: ["アニメ", "ファンタジー", "冒険"], actors: ["柊瑠美", "入野自由", "夏木マリ", "菅原文太"], img: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=400&q=80", ytId: "fS_f0yA9rZk", desc: "神々の集う湯屋に迷い込んだ少女千尋。不思議な少年ハクの助けを得て、様々な試練に立ち向かい成長していくスタジオジブリ金字塔。" },
+        { title: "アバター：ウェイ・オブ・ウォーター", score: "4.7", tags: "SF / 超映像美", category: "foreign", genres: ["SF", "アクション", "アドベンチャー"], actors: ["サム・ワーシントン", "ゾーイ・サルダナ", "シガニー・ウィーバー"], img: "https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?auto=format&fit=crop&w=400&q=80", ytId: "zXQZp0EIsYQ", desc: "神秘の星パンドラの深海世界へ。映像テクノロジーの極限を提示したジェームズ・キャメロン監督の究極の水没体験。" }
+      ]
+    };
+
+    // AIレコメンドシミュレーターのデータ
+    const aiSimulationPool = {
+      adventure: {
+        title: "マッドマックス 怒りのデス・ロード",
+        reason: "「アドレナリンを沸騰させ、魂をレッドゾーンまで加速したいあなたへ」",
+        desc: "CGを極限まで排除したリアルなクラッシュ。ただひたすらに走り、闘う。これ以上熱く、アドレナリンが止まらないロードショーはありません。",
+        img: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=300&q=80",
+        ytId: "hEJnMQG9lh8"
+      },
+      tears: {
+        title: "リメンバー・ミー",
+        reason: "「心の鎧をすべて脱ぎ捨て、温かく清らかな涙に満たされたい夜に」",
+        desc: "鮮やかな死者の国。忘れたくない愛しい人への想いが、一曲のギターとともに呼び戻されます。ラスト10分、絶対にあなたの涙が止まりません。",
+        img: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&w=300&q=80",
+        ytId: "vB8fM0FfFw8"
+      },
+      mind: {
+        title: "インセプション",
+        reason: "「退屈な日常をぶち壊し、128分間の極上マインドパズルを解きたい知的なあなたへ」",
+        desc: "クリストファー・ノーランが描く夢の中の世界。重力をも欺く圧倒的映像、物理法則を無視した夢の階層構造から、あなたは無事に脱出できるか。",
+        img: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=300&q=80",
+        ytId: "YoHD9XEInc0"
+      },
+      laugh: {
+        title: "グランド・ブダペスト・ホテル",
+        reason: "「退屈でおしゃれじゃない今夜の気分を、贅沢なアートとお人好しな笑顔で彩りたい夜に」",
+        desc: "完璧な絵コンテのようなカメラワーク、どこを切り取っても最高におしゃれなピンク色のホテル。極上のミステリーとおかしなドタバタ劇があなたを救います。",
+        img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=300&q=80",
+        ytId: "1Fg5iWmQjwk"
+      }
+    };
+
+    // レビューデータ管理（インメモリで保持）
+    const reviewsDataStore = {
+      "ラ・ラ・ランド": [
+        { name: "映画ソムリエ 麗子", rating: 5, comment: "音楽、衣装、カメラワークすべてが完璧。ラストの10分間は何度観ても鳥肌が立ち、夢見る勇気をもらえます。", date: "2026-05-15" },
+        { name: "シネマフリーク", rating: 4, comment: "現実の厳しさと夢の美しさの対比が素晴らしい。ほろ苦い結末がまた味わい深いです。", date: "2026-05-28" }
+      ],
+      "インセプション": [
+        { name: "脳内トラベラー", rating: 5, comment: "夢の中の階層構造という設定だけで圧倒されます。最後のコマのシーンは未だに議論が尽きないですね。", date: "2026-05-10" }
+      ],
+      "グレイテスト・ショーマン": [
+        { name: "祝祭のパフォーマー", rating: 5, comment: "『This Is Me』が流れる瞬間の爆発的なエネルギー！これぞ映画館で観るべきエンターテインメントの最高峰！", date: "2026-06-01" }
+      ]
+    };
+
+    // 状態管理変数
+    let currentVOD = 'netflix';
+    let currentCategory = 'all'; // 'all' (すべて), 'foreign' (洋画), 'japanese' (邦画)
+    let searchQuery = '';
+    let currentRating = 5; // 現在選択中のレビューの星
+    let activeMovieTitleForReview = ''; // モーダルで開いている作品名
+
+    // 初期起動時処理
+    window.onload = function() {
+      // 初期状態の映画レンダリング
+      renderMovies();
+    };
+
+    // カテゴリーフィルター（洋画・邦画・すべて）切り替え
+    function switchCategory(catKey) {
+      currentCategory = catKey;
+      
+      // 全カテゴリーボタンのスタイルをニュートラルに戻す
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.classList.remove('bg-gradient-to-r', 'from-luxGold', 'to-luxGoldLight', 'text-theaterBlack');
+        btn.classList.add('text-gray-400', 'hover:text-white');
+      });
+
+      // 選択されたカテゴリーボタンをシャンパンゴールドに輝かせる
+      const activeBtn = document.getElementById(`cat-${catKey}`);
+      activeBtn.classList.remove('text-gray-400', 'hover:text-white');
+      activeBtn.classList.add('bg-gradient-to-r', 'from-luxGold', 'to-luxGoldLight', 'text-theaterBlack');
+
+      // リスト再描画
+      renderMovies();
+    }
+
+    // 検索入力のリアルタイム反映 (キャスト名、タイトル、あらすじ、ジャンルの横断検索)
+    function handleSearch(query) {
+      searchQuery = query.trim().toLowerCase();
+      renderMovies();
+    }
+
+    // VODタブ切り替え関数
+    function switchVOD(vodKey) {
+      currentVOD = vodKey;
+
+      // 全タブのアクティブ状態をクリア
+      document.querySelectorAll('.vod-tab').forEach(tab => {
+        tab.classList.remove('active', 'neon-border-netflix', 'neon-border-prime', 'neon-border-unext', 'neon-border-disney', 'text-white', 'border-red-600', 'border-sky-400', 'border-blue-500', 'border-sky-300', 'bg-red-950/20');
+        tab.classList.add('border-gray-700', 'text-gray-400', 'bg-theaterDark');
+      });
+
+      // 対象タブをネオンカラーでアクティベート
+      const activeTab = document.getElementById(`btn-${vodKey}`);
+      activeTab.classList.remove('border-gray-700', 'text-gray-400', 'bg-theaterDark');
+      activeTab.classList.add('active', 'text-white');
+
+      let neonClass = '';
+      let borderCol = '';
+      if (vodKey === 'netflix') {
+        neonClass = 'neon-border-netflix';
+        borderCol = 'border-red-600';
+        activeTab.classList.add('bg-red-950/20');
+      } else if (vodKey === 'prime') {
+        neonClass = 'neon-border-prime';
+        borderCol = 'border-sky-400';
+      } else if (vodKey === 'unext') {
+        neonClass = 'neon-border-unext';
+        borderCol = 'border-blue-500';
+      } else if (vodKey === 'disney') {
+        neonClass = 'neon-border-disney';
+        borderCol = 'border-sky-300';
+      }
+      activeTab.classList.add(neonClass, borderCol);
+
+      // リスト再描画
+      renderMovies();
+    }
+
+    // 映画レンダリングメイン関数 (VOD、洋画・邦画、検索クエリの３つをリアルタイムで融合)
+    function renderMovies() {
+      const container = document.getElementById('vod-cards-container');
+      
+      // 切り替え時のアニメーションフェードアウト
+      container.style.opacity = '0';
+      container.style.transform = 'translateY(15px)';
+
+      setTimeout(() => {
+        container.innerHTML = '';
+        const movies = moviesData[currentVOD];
+
+        // フィルタリング処理
+        const filteredMovies = movies.filter(movie => {
+          // 1. 洋画 / 邦画 カテゴリフィルタ
+          if (currentCategory !== 'all' && movie.category !== currentCategory) {
+            return false;
+          }
+
+          // 2. 検索キーワードフィルタ (タイトル、あらすじ、ジャンル、キャストから検索)
+          if (searchQuery !== '') {
+            const matchTitle = movie.title.toLowerCase().includes(searchQuery);
+            const matchDesc = movie.desc.toLowerCase().includes(searchQuery);
+            const matchTags = movie.tags.toLowerCase().includes(searchQuery);
+            const matchGenres = movie.genres.some(g => g.toLowerCase().includes(searchQuery));
+            const matchActors = movie.actors.some(a => a.toLowerCase().includes(searchQuery));
+
+            // どれにも引っかからない場合は除外
+            if (!matchTitle && !matchDesc && !matchTags && !matchGenres && !matchActors) {
+              return false;
+            }
+          }
+
+          return true;
+        });
+
+        // 検索結果がゼロの場合のラグジュアリーな空表示
+        if (filteredMovies.length === 0) {
+          container.innerHTML = `
+            <div class="col-span-full py-16 text-center text-gray-500">
+              <i class="fa-solid fa-wand-magic-sparkles text-4xl text-luxGold/30 mb-3 block animate-pulse"></i>
+              <p class="text-sm font-bold text-luxGold">該当する映画が見つかりませんでした。</p>
+              <p class="text-xs text-gray-400 mt-2">キーワードを変更するか、洋画/邦画のタブを見直してみてください。</p>
+            </div>
+          `;
+        } else {
+          // カードの描画
+          filteredMovies.forEach(movie => {
+            const castList = movie.actors.slice(0, 3).join(', '); // キャストを最大3名表示
+            
+            const cardHtml = `
+              <div class="bg-theaterDark border border-luxGold/10 hover:border-luxGold/60 rounded-xl overflow-hidden transition-all duration-300 transform hover:-translate-y-1.5 shadow-lg flex flex-col justify-between">
+                <div>
+                  <div class="relative group overflow-hidden h-56 md:h-64">
+                    <img src="${movie.img}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" alt="${movie.title}">
+                    <!-- マウスホバーで現れるプレミアムボタン -->
+                    <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
+                      <button onclick="openTrailerModal('${movie.ytId}')" class="bg-cinemaRed text-white text-xs font-bold px-4 py-2.5 rounded-full flex items-center gap-1.5 hover:scale-105 transition">
+                        <i class="fa-solid fa-play text-[10px]"></i> 予告を再生
+                      </button>
+                    </div>
+                  </div>
+                  <div class="p-4 flex-1">
+                    <div class="flex justify-between items-center mb-1">
+                      <span class="text-[9px] text-luxGold font-semibold uppercase tracking-widest">${movie.tags}</span>
+                      <span class="text-xs text-luxGold font-serif"><i class="fa-solid fa-star mr-0.5"></i>${movie.score}</span>
+                    </div>
+                    <h3 class="font-bold text-sm md:text-base text-white mb-1 line-clamp-1">${movie.title}</h3>
+                    <p class="text-[10px] text-luxGoldLight/80 mb-2 line-clamp-1">出演: ${castList}</p>
+                    <p class="text-[11px] text-gray-400 line-clamp-2">${movie.desc}</p>
+                  </div>
+                </div>
+                <!-- 2つの高機能なアクションボタン構成 -->
+                <div class="p-4 pt-0 grid grid-cols-2 gap-2">
+                  <button onclick="promoteToHero('${movie.title.replace(/'/g, "\\'")}', '${movie.desc.replace(/'/g, "\\'")}', '${movie.img}', '${movie.ytId}', '${movie.tags}')" class="text-[10px] text-luxGold/60 hover:text-luxGold border border-luxGold/20 hover:border-luxGold/60 py-1.5 rounded transition text-center uppercase tracking-wider font-bold">
+                    特等席へ
+                  </button>
+                  <button onclick="openDetailModal('${movie.title.replace(/'/g, "\\'")}', '${currentVOD}')" class="text-[10px] bg-luxGold/15 hover:bg-luxGold text-white hover:text-theaterBlack border border-luxGold/30 py-1.5 rounded transition text-center font-bold">
+                    詳細・感想
+                  </button>
+                </div>
+              </div>
+            `;
+            container.innerHTML += cardHtml;
+          });
+        }
+
+        // フェードインアニメーション
+        container.style.opacity = '1';
+        container.style.transform = 'translateY(0)';
+      }, 250);
+    }
+
+    // 映画カードをファーストビュー（特等席）に昇格（プロモート）させる機能
+    function promoteToHero(title, desc, img, ytId, tags) {
+      const heroBg = document.getElementById('hero-bg');
+      const heroTitle = document.getElementById('hero-title');
+      const heroDesc = document.getElementById('hero-desc');
+      const heroAiReason = document.getElementById('hero-ai-reason');
+      const playBtn = document.getElementById('hero-play-btn');
+      const reviewBtn = document.getElementById('hero-review-btn');
+
+      // 背景をフェードしながら画像切り替え
+      heroBg.style.opacity = '0.1';
+      
+      setTimeout(() => {
+        heroBg.src = img;
+        heroTitle.innerText = title;
+        heroDesc.innerText = desc;
+        heroAiReason.innerText = `「AIが発見した、あなたに最高の高揚感をもたらす一本：${tags} の絶対注目作」`;
+        playBtn.setAttribute('onclick', `openTrailerModal('${ytId}')`);
+        
+        // ヒーローセクションのレビューボタンも動的に更新
+        if (reviewBtn) {
+          reviewBtn.setAttribute('onclick', `openDetailModal('${title.replace(/'/g, "\\'")}', '${currentVOD}')`);
+        }
+        
+        heroBg.style.opacity = '1';
+        // 最上部へスクロール
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 300);
+    }
+
+    // 体験型AIレコメンドエンジンのシミュレート
+    function simulateAIRecommend(mood) {
+      const resultBox = document.getElementById('ai-result');
+      resultBox.classList.add('hidden');
+
+      setTimeout(() => {
+        const item = aiSimulationPool[mood];
+        document.getElementById('ai-result-img').src = item.img;
+        document.getElementById('ai-result-title').innerText = item.title;
+        document.getElementById('ai-result-reason').innerText = item.reason;
+        document.getElementById('ai-result-desc').innerText = item.desc;
+        
+        const actionBtn = document.getElementById('ai-result-action');
+        actionBtn.setAttribute('onclick', `openTrailerModal('${item.ytId}')`);
+
+        resultBox.classList.remove('hidden');
+        resultBox.classList.add('block');
+        resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 200);
+    }
+
+    // カールズ・スクロール（タイムライン位置）への誘導
+    function scrollToTimeline() {
+      document.getElementById('timeline-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // プレミアムシアタートースト通知
+    function showCineLuxNotification(title, message) {
+      const toast = document.getElementById('lux-toast');
+      document.getElementById('toast-title').innerText = title;
+      document.getElementById('toast-message').innerText = message;
+      
+      toast.classList.remove('translate-y-full', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      
+      setTimeout(() => {
+        hideCineLuxNotification();
+      }, 4000);
+    }
+
+    function hideCineLuxNotification() {
+      const toast = document.getElementById('lux-toast');
+      if (toast) {
+        toast.classList.add('translate-y-full', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }
+    }
+
+    // AIコンシェルジュウィザード（ボタンからジャンプ）
+    function openRecommendationWizard() {
+      showCineLuxNotification('AI CONCIERGE', 'AIによる極上ガイドをシミュレート中。下部の「AI魔法体験」までスクロールしました。');
+      const element = document.getElementById('ai-result').parentElement;
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 映画詳細＆レビューモーダルの開閉処理
+    function openDetailModal(movieTitle, vodKey) {
+      activeMovieTitleForReview = movieTitle;
+      
+      // 対象映画のデータを検索
+      let movieObj = null;
+      if (moviesData.hero.title === movieTitle) {
+        movieObj = {
+          title: moviesData.hero.title,
+          desc: moviesData.hero.desc,
+          img: moviesData.hero.img,
+          ytId: moviesData.hero.id,
+          score: "4.6",
+          actors: ["ライアン・ゴズリング", "エマ・ストーン"]
+        };
+      } else {
+        const pool = moviesData[vodKey] || moviesData['netflix'];
+        movieObj = pool.find(m => m.title === movieTitle);
+      }
+
+      if (!movieObj) {
+        // AIシミュレーションプールから探す
+        const keys = Object.keys(aiSimulationPool);
+        for (let k of keys) {
+          if (aiSimulationPool[k].title === movieTitle) {
+            const item = aiSimulationPool[k];
+            movieObj = {
+              title: item.title,
+              desc: item.desc,
+              img: item.img,
+              ytId: item.ytId,
+              score: "4.8",
+              actors: ["特別シネマキャスト"]
+            };
+            break;
+          }
+        }
+      }
+
+      // フォールバック
+      if (!movieObj) {
+        movieObj = {
+          title: movieTitle,
+          desc: "夢と感動が織りなす極上の映画体験。CineLuxが贈る至高の映像美をお楽しみください。",
+          img: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=400&q=80",
+          ytId: "D1ZGBOxeM18",
+          score: "4.5",
+          actors: ["キャスト情報準備中"]
+        };
+      }
+
+      // モーダル内へのデータ埋め込み
+      document.getElementById('detail-movie-title').innerText = movieObj.title;
+      document.getElementById('detail-movie-img').src = movieObj.img;
+      document.getElementById('detail-movie-desc').innerText = movieObj.desc;
+      document.getElementById('detail-movie-actors').innerText = movieObj.actors ? movieObj.actors.join(', ') : "出演者情報なし";
+      document.getElementById('detail-movie-score').innerText = movieObj.score || "4.5";
+      
+      // 予告編ボタンにアクションバインド
+      document.getElementById('detail-play-btn').setAttribute('onclick', `openTrailerModal('${movieObj.ytId}')`);
+
+      // フォームの星初期化
+      setRating(5);
+      document.getElementById('review-author').value = '';
+      document.getElementById('review-comment').value = '';
+
+      // レビューの描画
+      renderReviews(movieObj.title);
+
+      // モーダルの表示
+      const modal = document.getElementById('detail-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeDetailModal() {
+      const modal = document.getElementById('detail-modal');
+      modal.classList.add('hidden');
+    }
+
+    // 星評価セレクターのビジュアルセット
+    function setRating(rating) {
+      currentRating = rating;
+      const stars = document.querySelectorAll('.star-btn');
+      stars.forEach((star, index) => {
+        if (index < rating) {
+          star.classList.remove('text-gray-600');
+          star.classList.add('text-luxGold');
+          star.innerHTML = '<i class="fa-solid fa-star"></i>';
+        } else {
+          star.classList.remove('text-luxGold');
+          star.classList.add('text-gray-600');
+          star.innerHTML = '<i class="fa-regular fa-star"></i>';
+        }
+      });
+    }
+
+    // レビューのレンダリング処理
+    function renderReviews(movieTitle) {
+      const container = document.getElementById('reviews-list-container');
+      container.innerHTML = '';
+
+      // 該当のレビューデータを取得、無ければ初期モックを設定
+      if (!reviewsDataStore[movieTitle]) {
+        reviewsDataStore[movieTitle] = [
+          { name: "CineLux コンシェルジュ", rating: 5, comment: `「${movieTitle}」を鑑賞したVIP会員の皆様、ぜひ極上シートの感想をお寄せください。`, date: "2026-06-02" }
+        ];
+      }
+
+      const reviews = reviewsDataStore[movieTitle];
+      reviews.forEach(rev => {
+        // 星のビジュアル表示用
+        let starSpans = '';
+        for (let i = 0; i < 5; i++) {
+          if (i < rev.rating) {
+            starSpans += '<i class="fa-solid fa-star text-luxGold text-[10px]"></i>';
+          } else {
+            starSpans += '<i class="fa-regular fa-star text-gray-600 text-[10px]"></i>';
+          }
+        }
+
+        const revHtml = `
+          <div class="bg-theaterBlack p-3 rounded-lg border border-luxGold/10 space-y-1.5">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-xs text-luxGoldLight">${rev.name}</span>
+              <span class="text-[10px] text-gray-500">${rev.date}</span>
+            </div>
+            <div class="flex gap-0.5">${starSpans}</div>
+            <p class="text-xs text-gray-300 leading-relaxed">${rev.comment}</p>
+          </div>
+        `;
+        container.innerHTML += revHtml;
+      });
+
+      // スクロールを最上部に
+      container.scrollTop = 0;
+    }
+
+    // 新規レビュー投稿処理
+    document.getElementById('submit-review-btn').onclick = function() {
+      const authorInput = document.getElementById('review-author');
+      const commentInput = document.getElementById('review-comment');
+
+      const author = authorInput.value.trim() || "匿名VIP席ゲスト";
+      const comment = commentInput.value.trim();
+
+      if (!comment) {
+        showCineLuxNotification('REVIEW ERROR', 'レビューコメントが空欄です。ぜひ感動したシーンをご入力ください。');
+        return;
+      }
+
+      // レビューの追加
+      const newReview = {
+        name: author,
+        rating: currentRating,
+        comment: comment,
+        date: new Date().toISOString().split('T')[0] // YYYY-MM-DD
+      };
+
+      if (!reviewsDataStore[activeMovieTitleForReview]) {
+        reviewsDataStore[activeMovieTitleForReview] = [];
+      }
+      reviewsDataStore[activeMovieTitleForReview].unshift(newReview); // 先頭に追加
+
+      // 再描画＆入力リセット
+      renderReviews(activeMovieTitleForReview);
+      commentInput.value = '';
+      authorInput.value = '';
+
+      showCineLuxNotification('REVIEW SUCCESS', `「${activeMovieTitleForReview}」に星${currentRating}のレビューを書き込みました！`);
+    };
+
+    // 予告編モーダル開閉
+    function openTrailerModal(ytId) {
+      const modal = document.getElementById('trailer-modal');
+      const container = document.getElementById('yt-player-container');
+      
+      // YouTubeの埋め込みiFrameを動的にセット
+      container.innerHTML = `
+        <iframe class="w-full h-full" src="https://www.youtube.com/embed/${ytId}?autoplay=1&mute=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      `;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeTrailerModal() {
+      const modal = document.getElementById('trailer-modal');
+      const container = document.getElementById('yt-player-container');
+      container.innerHTML = ''; // 動画停止
+      modal.classList.add('hidden');
+    }
+
+    // チケット予約モーダル開閉
+    function openTicketModal(movieTitle, cinemaName) {
+      document.getElementById('ticket-movie-title').innerText = movieTitle;
+      document.getElementById('ticket-cinema-name').innerText = cinemaName;
+      
+      const modal = document.getElementById('ticket-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeTicketModal() {
+      const modal = document.getElementById('ticket-modal');
+      const container = document.getElementById('yt-player-container');
+      container.innerHTML = ''; // 確実に停止
+      modal.classList.add('hidden');
+    }
+
+    function selectShowtime(time) {
+      showCineLuxNotification('RESERVATION', `お座席の確保シミュレーション：本日 ${time} 上映のチケット決済手続きを開始します。`);
+    }
+  </script>
+</body>
+</html>
